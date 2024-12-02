@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Million Pixel Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+        }
+        #canvas-container {
+            margin: 20px auto;
+            position: relative;
+            width: 1000px;
+            height: 1000px;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        .info {
+            margin-top: 20px;
+        }
+        .purchase-form {
+            margin-top: 30px;
+            display: inline-block;
+            text-align: left;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .purchase-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .purchase-form input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .purchase-form input[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Million Pixel Website</h1>
+        <p>Own a piece of internet history by buying pixels on our 1,000,000-pixel canvas!</p>
+    </header>
+
+    <div id="canvas-container">
+        <canvas id="pixelCanvas" width="1000" height="1000"></canvas>
+    </div>
+
+    <div class="info">
+        <p>Click on the canvas to select your pixel location.</p>
+    </div>
+
+    <form class="purchase-form">
+        <h3>Purchase Pixels</h3>
+        <label for="x">X Coordinate:</label>
+        <input type="number" id="x" name="x" min="0" max="999" required>
+
+        <label for="y">Y Coordinate:</label>
+        <input type="number" id="y" name="y" min="0" max="999" required>
+
+        <label for="color">Color:</label>
+        <input type="color" id="color" name="color" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" placeholder="https://example.com" required>
+
+        <input type="submit" value="Purchase Pixel">
+    </form>
+
+    <script>
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Draw grid
+        for (let x = 0; x < 1000; x += 10) {
+            for (let y = 0; y < 1000; y += 10) {
+                ctx.strokeStyle = '#ddd';
+                ctx.strokeRect(x, y, 10, 10);
+            }
+        }
+
+        // Form submission handling
+        const form = document.querySelector('.purchase-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const x = parseInt(document.getElementById('x').value, 10);
+            const y = parseInt(document.getElementById('y').value, 10);
+            const color = document.getElementById('color').value;
+            const url = document.getElementById('url').value;
+
+            // Draw selected pixel
+            ctx.fillStyle = color;
+            ctx.fillRect(x * 10, y * 10, 10, 10);
+
+            alert(`Pixel purchased at (${x}, ${y})! Visit: ${url}`);
+
+            // Optionally: Save data to a server
+            // fetch('/purchase', {
+            //     method: 'POST',
+            //     body: JSON.stringify({ x, y, color, url }),
+            //     headers: { 'Content-Type': 'application/json' }
+            // });
+        });
+
+        // Click on canvas to autofill coordinates
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / 10);
+            const y = Math.floor((e.clientY - rect.top) / 10);
+            document.getElementById('x').value = x;
+            document.getElementById('y').value = y;
+        });
+    </script>
+</body>
+</html>
